@@ -49,6 +49,7 @@ app.get("/feed", async (req, res) => {
 
 app.delete("/user", async (req, res) => {
   const userId = req.body.userId;
+  
   try {
     const user = await User.findByIdAndDelete(userId);
     res.send("User deleted successfully");
@@ -57,10 +58,22 @@ app.delete("/user", async (req, res) => {
   }
 });
 
-app.patch("/user", async (req, res) => {
-  const userId = req.body.userId;
-  const data = req.body;
+app.patch("/user/:userId", async (req, res) => {
+  const userId = req.params?.userId;
+
   try {
+    const AllowedUpdates = ["firstName", "skills", "age", "photoUrl", "password", "about"];
+    const data = req.body;
+   
+    console.log(data);
+    const isAllwedUpdates = Object.keys(data).every((k) => AllowedUpdates.includes(k));
+    console.log(isAllwedUpdates);
+    if (!isAllwedUpdates) {
+      throw new Error("update not allowed");
+    }
+    if (data?.skills.length > 5) {
+      throw new Error("Skills cannot be more than 5.");
+    }
     const user = await User.findByIdAndUpdate(userId, data);
     res.send("user updated successfully");
   } catch (err) {
@@ -68,9 +81,7 @@ app.patch("/user", async (req, res) => {
   }
 });
 
-app.put("/user",async(req,res)=>{
-    
-})
+app.put("/user", async (req, res) => {});
 connectToMongoDB()
   .then(() => {
     console.log("database connection established");
