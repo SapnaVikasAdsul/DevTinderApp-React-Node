@@ -4,7 +4,7 @@ const express = require("express");
 const connectToMongoDB = require("./config/database");
 const app = express();
 const User = require("./models/user");
-
+const validateSignUpData = require("./utils/validateSignUpData");
 app.use(express.json()); //middleware to convert json response
 
 app.post("/signup", async (req, res) => {
@@ -16,8 +16,16 @@ app.post("/signup", async (req, res) => {
   //   };
   //   creating s new instance of the user model
   //  const user = new User(userObj);
-  const user = new User(req.body);
+
   try {
+    //validation of data
+    validateSignUpData(req);
+
+    //Encrypt the password
+
+    
+
+    const user = new User(req.body);
     await user.save();
     res.send("User added successfully");
   } catch (err) {
@@ -49,7 +57,7 @@ app.get("/feed", async (req, res) => {
 
 app.delete("/user", async (req, res) => {
   const userId = req.body.userId;
-  
+
   try {
     const user = await User.findByIdAndDelete(userId);
     res.send("User deleted successfully");
@@ -64,7 +72,7 @@ app.patch("/user/:userId", async (req, res) => {
   try {
     const AllowedUpdates = ["firstName", "skills", "age", "photoUrl", "password", "about"];
     const data = req.body;
-   
+
     console.log(data);
     const isAllwedUpdates = Object.keys(data).every((k) => AllowedUpdates.includes(k));
     console.log(isAllwedUpdates);
