@@ -1,15 +1,31 @@
 import React, { useState } from 'react'
+import axios from "axios"
+import { useDispatch } from 'react-redux';
+import { addUser } from './utils/userSlice';
+import { useNavigate } from 'react-router-dom';
 
 function Login() {
-    const [email, setEmail]=useState("");
-    const [password, setPassword]=useState("");
-    const handleLogin=async()=>{
-        // try{
-        //     const post=await axios.post("")
-        // }
+    const [emailId, setEmail] = useState("sanku.dream@gmail.com");
+    const [password, setPassword] = useState("Sanket@1234");
+    const dispatch = useDispatch();
+    const navigate = useNavigate()
 
-
+    const handleLogin = async () => {
+        try {
+            const res = await axios.post("http://localhost:3000/login", {
+                emailId,
+                password
+            },
+                { withCredentials: true }
+            )
+            dispatch(addUser(res.data))
+            navigate("/")
+        }
+        catch (err) {
+            console.error(err);
+        }
     }
+
 
     return (
         <div className='flex justify-center my-10'>
@@ -19,11 +35,11 @@ function Login() {
                     <div >
                         <fieldset className="fieldset">
                             <legend className="fieldset-legend py-4">Email ID</legend>
-                            <input type="text" className="input" placeholder="Type here" value={email} onChange={(e)=>setEmail(e.target.value)}/>
+                            <input type="text" className="input" placeholder="Type here" value={emailId} onChange={(e) => setEmail(e.target.value)} />
                         </fieldset>
                         <fieldset className="fieldset">
                             <legend className="fieldset-legend py-4">Password</legend>
-                            <input type="password" className="input" placeholder="Type here" value={password} onChange={(e)=>setPassword(e.target.value)}/>
+                            <input type="password" className="input" placeholder="Type here" value={password} onChange={(e) => setPassword(e.target.value)} />
                         </fieldset>
                     </div>
 
