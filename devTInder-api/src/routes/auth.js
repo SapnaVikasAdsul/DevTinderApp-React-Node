@@ -44,7 +44,7 @@ authRouter.post("/login", async (req, res) => {
         //Add the token in cookey and send response to user
         res.cookie("token", token);
 
-        res.send("Login successful!");
+        res.send(user);
     } else {
         res.send("Password incorrect");
     }

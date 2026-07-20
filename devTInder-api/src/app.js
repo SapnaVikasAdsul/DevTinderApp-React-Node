@@ -2,7 +2,7 @@ console.log("starting backend");
 
 const express = require("express");
 const connectToMongoDB = require("./config/database");
-
+const cors = require("cors")
 const app = express();
 const User = require("./models/user");
 const { validateSignUpData } = require("./utils/validateSignUpData");
@@ -10,16 +10,20 @@ const jwt = require("jsonwebtoken");
 const { userAuth } = require("./middlewares/auth");
 const cookieParser = require("cookie-parser")
 
+app.use(cors({
+  origin: "http://localhost:5173",
+  credentials: true
+}));
 app.use(express.json()); //middleware to convert json response
 app.use(cookieParser())
 
-const authRouter=require("./routes/auth");
-const profileRouter=require("./routes/profile");
-const requestRouter=require("./routes/request")
+const authRouter = require("./routes/auth");
+const profileRouter = require("./routes/profile");
+const requestRouter = require("./routes/request")
 
-app.use("/",authRouter);
-app.use("/",profileRouter)
-app.use("/",requestRouter)
+app.use("/", authRouter);
+app.use("/", profileRouter)
+app.use("/", requestRouter)
 
 
 // app.get("/user", async (req, res) => {
