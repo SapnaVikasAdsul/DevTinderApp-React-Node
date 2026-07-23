@@ -9,6 +9,7 @@ function Login() {
     const [password, setPassword] = useState("Sanket@1234");
     const dispatch = useDispatch();
     const navigate = useNavigate()
+    const [error, setError] = useState("")
 
     const handleLogin = async () => {
         try {
@@ -18,10 +19,12 @@ function Login() {
             },
                 { withCredentials: true }
             )
+            console.log(res)
             dispatch(addUser(res.data))
             navigate("/")
         }
         catch (err) {
+            setError(err?.response?.data || "Something went wrong")
             console.error(err);
         }
     }
@@ -42,7 +45,7 @@ function Login() {
                             <input type="password" className="input" placeholder="Type here" value={password} onChange={(e) => setPassword(e.target.value)} />
                         </fieldset>
                     </div>
-
+                    <p className='text-red-500'>{error}</p>
                     <div className="card-actions justify-center">
                         <button className="btn btn-primary" onClick={handleLogin}>Login</button>
 
