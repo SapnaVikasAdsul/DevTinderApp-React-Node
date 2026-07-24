@@ -1,5 +1,5 @@
-const express=require("express");
-const requestRouter=express.Router();
+const express = require("express");
+const requestRouter = express.Router();
 const User = require("../models/user");
 const { validateSignUpData } = require("../utils/validateSignUpData");
 const { userAuth } = require("../middlewares/auth");
@@ -15,7 +15,7 @@ requestRouter.post(
       const fromUserId = req.user._id;
       const toUserId = req.params.toUserId;
       const status = req.params.status;
-
+    
       const allowedStatus = ["ignored", "interested"];
       if (!allowedStatus.includes(status)) {
         return res
@@ -60,6 +60,7 @@ requestRouter.post(
         data,
       });
     } catch (err) {
+      console.error(err);
       res.status(400).send("ERROR: " + err.message);
     }
   }
@@ -102,4 +103,4 @@ requestRouter.post(
 
 module.exports = requestRouter;
 
-module.exports=requestRouter
+module.exports = requestRouter

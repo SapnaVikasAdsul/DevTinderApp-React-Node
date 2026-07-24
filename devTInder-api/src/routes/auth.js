@@ -23,8 +23,14 @@ authRouter.post("/signup", async (req, res) => {
         const passwordHash = await bcrypt.hash(password, 10);
         const userObj = { ...req.body, password: passwordHash };
         const user = new User(userObj);
-        await user.save();
-        res.send("User added successfully");
+        const savedUser = await user.save();
+
+        const token = await jwt.sign({ _id: savedUser._id }, "DEV@tinder48598", { expiresIn: "1d" });
+
+        res.cookie("token", token);
+
+
+        res.json({ message: "User added successfully", data: savedUser });
     } catch (err) {
         res.status(400).send("Error saving user:" + err.message);
     }

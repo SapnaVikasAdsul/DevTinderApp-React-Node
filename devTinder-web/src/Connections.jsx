@@ -5,12 +5,12 @@ import { useDispatch, useSelector } from 'react-redux';
 import { addConnection } from './utils/connectionSlice';
 
 const Connections = () => {
-    const connections = useSelector((store) => store.connections)
+    const connections = useSelector((store) => store.connection)
     const dispatch = useDispatch();
     const fetchConnections = async () => {
         try {
             const res = await axios.get("http://localhost:3000/connections", { withCredentials: true });
-            console.log(res.data.data)
+            // console.log("connections response", res.data.data)
             dispatch(addConnection(res.data.data))
         }
         catch (err) {

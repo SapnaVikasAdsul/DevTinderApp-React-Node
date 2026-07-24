@@ -1,8 +1,8 @@
-import reducer from "./userSlice";
-import {createSlice} from "@reduxjs/toolkit";
+
+import { createSlice } from "@reduxjs/toolkit";
 
 const connectionSlice = createSlice({
-    name: "connection",
+    name: "connections",
     initialState: null,
     reducers: {
         addConnection: (state, action) => {
